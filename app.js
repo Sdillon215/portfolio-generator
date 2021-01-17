@@ -31,27 +31,32 @@ const promptUser = () => {
       }
     },
     {
+      type: 'confirm',
+      name: 'confirmAbout',
+      message: 'Would you like to enter some information about yourself for an "About" section?',
+      default: true
+    },
+    {
       type: 'input',
       name: 'about',
-      massage: 'Provide some information about yourself:',
-      validate: nameInput => {
-        if (nameInput) {
+      message: 'Provide some information about yourself:',
+      when: ({ confirmAbout }) => {
+        if (confirmAbout) {
           return true;
         } else {
-          console.log('Please enter information about yourself!');
           return false;
         }
       }
-    }
+    },
   ]);
 };
 
 // project questions
 const promptProject = portfolioData => {
-// if there's no 'projects' array property, create one
-if (!portfolioData.projects) {
-  portfolioData.projects = [];
-}
+  // if there's no 'projects' array property, create one
+  if (!portfolioData.projects) {
+    portfolioData.projects = [];
+  }
   console.log(`
     ===========
     Add a New Project 
@@ -92,21 +97,21 @@ if (!portfolioData.projects) {
       default: false
     }
   ])
-  .then(projectData => {
-    portfolioData.projects.push(projectData);
-    if (projectData.confirmAddProject) {
-      return promptProject(portfolioData);
-    } else {
-      return portfolioData;
-    }
-  });
+    .then(projectData => {
+      portfolioData.projects.push(projectData);
+      if (projectData.confirmAddProject) {
+        return promptProject(portfolioData);
+      } else {
+        return portfolioData;
+      }
+    });
 };
 
 promptUser()
-.then(promptProject)
-.then(portfolioData => {
-  console.log(portfolioData);
-});
+  .then(promptProject)
+  .then(portfolioData => {
+    console.log(portfolioData);
+  });
 
 
 
