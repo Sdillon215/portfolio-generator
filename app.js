@@ -1,3 +1,4 @@
+const { truncate } = require('fs');
 const inquirer = require('inquirer');
 // const fs = require('fs');
 // const generatePage = require('./src/page-template.js');
@@ -39,9 +40,22 @@ const promptUser = () => {
             }
         },
         {
+            type: 'confirm',
+            name: 'confirmAbout',
+            message: 'Would you like to enter some information about youreself for an "about" section?',
+            default: true
+        },
+        {
             type: 'input',
             name: 'about',
-            message: 'Provide some info about yourself'
+            message: 'Provide some info about yourself:',
+            when: ({confirmAbout}) => {
+                if (confirmAbout) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
     ]);
 };
